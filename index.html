@@ -64,7 +64,42 @@
   </div>
 
   <section id="products">
-    <h2>What We Offer</h2>
+    <h2>Featured Product</h2>
+    <div class="product-card">
+      <img src="novakit-cover.png" alt="REAPER Podcast Mix Template" class="cover">
+      <div class="product-info">
+        <h3>Podcast Mix Template for REAPER</h3>
+        <p class="tagline">A fully configured REAPER project for podcast &amp; interview production. Open it, drop each speaker onto their own track, and start mixing.</p>
+        <ul>
+          <li>All FX chains built with REAPER's built-in plug-ins — <b>zero third-party dependencies</b></li>
+          <li>4 pre-wired voice tracks (HOST + GUEST 1–3), expandable by duplication</li>
+          <li>Automatic music ducking, built-in noise reduction, non-destructive processing</li>
+          <li>Loudness normalized to −16 LUFS — MP3 + WAV rendered in one pass</li>
+          <li>Includes a 3-page Quick Start PDF</li>
+        </ul>
+        <div class="buyrow">
+          <span class="p">$19</span>
+          <a class="cta" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">Buy Now</a>
+        </div>
+        <p class="fine">REAPER 7+ · Instant download · Secure checkout by Creem · Requires REAPER (sold separately)</p>
+      </div>
+    </div>
+    <style>
+      .product-card{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:28px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;align-items:center}
+      @media(max-width:760px){.product-card{grid-template-columns:1fr}}
+      .product-card .cover{width:100%;border-radius:10px;display:block;border:1px solid var(--border)}
+      .product-card h3{font-size:24px;margin-bottom:8px}
+      .product-card .tagline{color:var(--muted);margin-bottom:14px}
+      .product-card ul{margin:0 0 18px 18px;color:var(--text);font-size:15px}
+      .product-card li{margin-bottom:6px}
+      .buyrow{display:flex;align-items:center;gap:18px}
+      .buyrow .p{font-size:34px;font-weight:800;color:var(--accent)}
+      .product-card .fine{color:var(--muted);font-size:13px;margin-top:12px}
+    </style>
+  </section>
+
+  <section>
+    <h2>More From NovaKit</h2>
     <div class="grid">
       <div class="card"><div class="ico">📋</div><h3>Templates</h3><p>Notion templates, resume/CV templates, spreadsheets and workflow systems — ready to use out of the box.</p></div>
       <div class="card"><div class="ico">📚</div><h3>E-books & Guides</h3><p>Practical, action-focused guides to help you learn faster and apply immediately.</p></div>
