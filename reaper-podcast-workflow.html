@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Mix a Multi-Speaker Podcast in REAPER (Stock Plug-Ins Only)</title>
+<meta name="description" content="A step-by-step REAPER workflow for multi-speaker podcast mixing using only built-in plug-ins: track layout, ReaFir noise reduction, ReaComp sidechain ducking, ReaLimit and -16 LUFS delivery.">
+<meta name="google" content="notranslate">
+<link rel="canonical" href="https://novakit-yang.github.io/reaper-podcast-workflow.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Mix a Multi-Speaker Podcast in REAPER (Stock Plug-Ins Only)">
+<meta property="og:description" content="Track layout, noise reduction, sidechain ducking and loudness delivery — a complete REAPER podcast workflow with zero third-party plug-ins.">
+<meta property="og:url" content="https://novakit-yang.github.io/reaper-podcast-workflow.html">
+<meta property="og:image" content="https://novakit-yang.github.io/novakit-cover.png">
+<style>
+  :root{
+    --bg:#0f1220; --card:#181c30; --card2:#1e2340; --text:#e8eaf6; --muted:#9aa3c7;
+    --accent:#7c6cff; --accent2:#4dd6c1; --border:#2a2f52;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.75}
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px}
+  header{padding:26px 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);margin-bottom:40px}
+  .logo{font-weight:800;font-size:20px;letter-spacing:.5px}
+  .logo span{color:var(--accent)}
+  nav a{margin-left:22px;color:var(--muted);font-size:14px}
+  nav a:hover{color:var(--text);text-decoration:none}
+  .kicker{color:var(--accent2);font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:38px;line-height:1.25;font-weight:800;margin-bottom:16px}
+  .meta{color:var(--muted);font-size:14px;margin-bottom:34px}
+  .lede{font-size:19px;color:#c8cde8;margin-bottom:34px}
+  h2{font-size:26px;margin:48px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+  h3{font-size:18px;margin:28px 0 8px;color:#d8dcf2}
+  p{margin-bottom:16px}
+  ul,ol{margin:0 0 18px 22px}
+  li{margin-bottom:8px}
+  code{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:2px 6px;font-size:14px;color:#c7d2ff;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  pre{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;font-size:14px;line-height:1.6;color:#c7d2ff;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .note{background:var(--card2);border-left:3px solid var(--accent2);border-radius:0 10px 10px 0;padding:16px 20px;margin:0 0 20px;font-size:15px;color:#c8cde8}
+  .warn{border-left-color:#e08b4a}
+  table{width:100%;border-collapse:collapse;margin:0 0 22px;font-size:15px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border)}
+  th{color:var(--accent2);font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+  .cta-box{background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:16px;padding:30px;margin:52px 0 20px}
+  .cta-box h3{margin-top:0;font-size:21px;color:var(--text)}
+  .cta-box p{color:var(--muted);font-size:15px;margin-bottom:18px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;font-weight:600;padding:12px 26px;border-radius:10px;font-size:15px}
+  .btn:hover{filter:brightness(1.1);text-decoration:none}
+  footer{border-top:1px solid var(--border);margin-top:56px;padding:26px 0;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a{margin-left:16px}
+  @media(max-width:600px){h1{font-size:29px}h2{font-size:22px}nav a{margin-left:14px;font-size:13px}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "How to Mix a Multi-Speaker Podcast in REAPER (Stock Plug-Ins Only)",
+  "description": "A step-by-step REAPER workflow for multi-speaker podcast mixing using only built-in plug-ins.",
+  "author": {"@type": "Organization", "name": "NovaKit"},
+  "publisher": {"@type": "Organization", "name": "NovaKit"},
+  "mainEntityOfPage": "https://novakit-yang.github.io/reaper-podcast-workflow.html"
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">Nova<span>Kit</span></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#products">Product</a>
+  </nav>
+</header>
+
+<div class="kicker">REAPER Workflow</div>
+<h1>How to Mix a Multi-Speaker Podcast in REAPER (Stock Plug-Ins Only)</h1>
+<div class="meta">By NovaKit · 8 min read · REAPER 7</div>
+
+<p class="lede">Four people record in four different rooms, on four different microphones, and you get four files with four different noise floors. Here is the full REAPER routing and processing chain that turns that into a broadcast-ready episode — using nothing but plug-ins that already ship with REAPER.</p>
+
+<h2>Why one track per speaker is not optional</h2>
+
+<p>The most common shortcut is to drop every recording onto one track and hit it with one chain. It sounds acceptable in a quiet room and falls apart everywhere else. Reasons:</p>
+
+<ul>
+  <li><strong>Noise floors differ.</strong> One guest has a laptop fan, another has a fridge, a third has street noise. A single noise profile cannot remove three different noises — it can only target one, and it damages the other voices trying.</li>
+  <li><strong>Levels differ.</strong> Someone sits 10 cm from the mic, someone sits 40 cm away. In one shared chain the quiet guest gets compressed against a threshold set for the loud host.</li>
+  <li><strong>Tone differs.</strong> A dynamic mic in a treated room and a USB mic in a kitchen do not want the same EQ or the same compression.</li>
+</ul>
+
+<p>So the session is built around one voice track per person, each with its own independent chain, all feeding a shared dialogue bus.</p>
+
+<h2>Step 1 — Build the session skeleton</h2>
+
+<p>Four buses, in this order from top to bottom:</p>
+
+<pre>MASTER
+MUSIC BUS
+  MUSIC          (empty — your background music)
+DIALOGUE BUS
+  HOST
+  GUEST 1
+  GUEST 2
+  GUEST 3
+SFX BUS
+  SFX            (empty — your transitions)</pre>
+
+<p>In REAPER, <code>MUSIC BUS</code>, <code>DIALOGUE BUS</code> and <code>SFX BUS</code> are folder tracks: set the bus track as a folder parent (the small folder button in the lower-left corner of its control panel), then indent the child tracks beneath it. Folder tracks give you three things for free: a single fader per group, a single place to insert group processing, and — critically for the next step — a single point to send from.</p>
+
+<p>Put <code>MASTER</code> at the top only if that is how you like to see it; REAPER does not care about visual order, and the master track is always the hardware output.</p>
+
+<div class="note">If you record more than four people, duplicate a guest track (<code>right-click → Duplicate track</code>). The copy inherits the entire FX chain and stays inside the DIALOGUE BUS folder, so it is instantly usable.</div>
+
+<h2>Step 2 — Align the takes before you process anything</h2>
+
+<p>Remote recordings almost never share a time origin. Even when a platform exports “synchronised” files, each client starts recording at its own moment, so the files will be offset by anywhere from a few hundred milliseconds to several seconds.</p>
+
+<p>Do not trust the file start. Find a moment where everybody speaks at once — the “hey, can you hear me?” at the top is usually perfect — and slide the guest clips until the waveforms line up at that point. Zoom in on the transient and match the attack, not the tail.</p>
+
+<h2>Step 3 — Clean up: noise reduction with ReaFir</h2>
+
+<p>REAPER's <code>ReaFir</code> in <strong>Subtract</strong> mode is a noise-profile-based reducer: it learns the spectrum of a steady noise, then subtracts that spectrum continuously. This is the same basic principle as iZotope RX's spectral denoise, minus the manual editing tools.</p>
+
+<ol>
+  <li>Put <code>ReaFir</code> as the first plug-in on each voice track, set the mode to <strong>Subtract</strong>.</li>
+  <li>Find 10–20 seconds where the speaker is <em>not</em> talking — room tone only. Every decent recording has it at the head.</li>
+  <li>Play that section, tick <strong>Automatically build noise profile</strong>, let it run for a couple of seconds, then untick it.</li>
+  <li>Repeat per speaker, per episode. The profile is a fingerprint of that room and that microphone on that day; a profile from last week's session will not fit.</li>
+</ol>
+
+<div class="note warn">ReaFir cannot remove <strong>keyboard clicks, chair creaks, paper rustles or mouse clicks</strong>. Those are transient events that overlap the voice spectrum — trying to subtract them takes the consonants with them. Room treatment and mic technique are the only fixes.</div>
+
+<h2>Step 4 — Level the voices with ReaComp</h2>
+
+<p>This is the step that makes the biggest audible difference, and the one most home mixes skip. Each speaker track gets a <code>ReaComp</code> configured as a slow, gentle <em>auto volume rider</em>:</p>
+
+<ul>
+  <li><strong>Detector input:</strong> main input, <strong>RMS</strong> rather than peak — you want to follow perceived loudness, not transients.</li>
+  <li><strong>Knee:</strong> soft (a wide knee). Hard-knee compression on speech is audible as pumping.</li>
+  <li><strong>Release:</strong> slow, in the hundreds of milliseconds. Fast release makes the gain chase every syllable and creates a breathing artefact.</li>
+  <li><strong>Auto make-up gain:</strong> off. Leave it off deliberately.</li>
+</ul>
+
+<p>The auto make-up point matters. Its job is to restore the output to the input level — which cancels out exactly what you just did. With it off, the output gain becomes your <strong>inter-speaker level control</strong>: trim each track's output so the host and every guest sit at the same perceived loudness, and the difference is baked into the session. That is a one-time setup per template, not a per-episode task.</p>
+
+<div class="note">If a track has a dedicated low-cut before the compressor, keep it. Removing sub-100 Hz rumble before compression stops the compressor from reacting to energy nobody can hear.</div>
+
+<h2>Step 5 — Duck the music automatically (ReaComp sidechain)</h2>
+
+<p>Background music should drop when someone speaks and come back when they stop. Doing that by hand with volume automation is 40 minutes of clicking per episode. REAPER can do it with a second <code>ReaComp</code> and one send.</p>
+
+<pre>1. DIALOGUE BUS  →  I/O  →  Add send to MUSIC BUS
+     Audio  1/2 → 3/4     (post-fader)
+
+2. MUSIC BUS     →  insert ReaComp
+     Detector input:  Auxiliary Input L+R</pre>
+
+<p>Now the dialogue bus feeds the compressor's <em>detector</em> but not its audio path: when the voices get loud, the music is turned down; when they stop, it recovers. Set the ratio high and the release moderate so the music breathes back rather than snapping.</p>
+
+<div class="note warn"><strong>Why ReaComp and not ReaXcomp?</strong> A multiband compressor looks like the right tool for “duck only the midrange,” but in REAPER <code>ReaXcomp</code> has no external sidechain detector input — it can only listen to its own input. That makes band-limited ducking impossible without extra routing. A full-band duck with a well-set release is what most speech-over-music mixes actually want anyway: the music is already EQ'd to sit under the voice, so pulling the whole thing down sounds natural.</div>
+
+<p>Auxiliary channels 3/4 are used rather than 1/2 so the music bus is not receiving the dialogue as audio — the voices must not be heard twice.</p>
+
+<h2>Step 6 — Master limiting with ReaLimit</h2>
+
+<p>Put <code>ReaLimit</code> on the master. Two controls matter:</p>
+
+<ul>
+  <li><strong>Ceiling: −1.0 dBTP.</strong> This is the delivery standard for every major podcast platform and streaming service.</li>
+  <li><strong>Threshold: close to the ceiling.</strong> The limiter is a fuse, not a compressor. If the threshold sits several dB below the ceiling it will flatten normal peaks and audibly squash the mix. Set it just under the ceiling so it only catches the occasional transient.</li>
+</ul>
+
+<p>REAPER's limiter has no output gain, by design: the ceiling <em>is</em> the output level. Do not go looking for a gain knob — overall loudness is handled at render, in the next step.</p>
+
+<h2>Step 7 — Render to −16 LUFS</h2>
+
+<p>Open <strong>File → Render</strong> and configure it once, then save the project — REAPER stores the render settings inside the <code>.RPP</code> file, so they travel with the session instead of living in your local preferences.</p>
+
+<table>
+  <tr><th>Setting</th><th>Value</th></tr>
+  <tr><td>Normalize / limit</td><td>LUFS-I, target −16, true peak limit −1.0 dBTP</td></tr>
+  <tr><td>Sample rate</td><td>48 kHz</td></tr>
+  <tr><td>Primary format</td><td>MP3 · 256 kbps · 48 kHz (upload version)</td></tr>
+  <tr><td>Secondary format</td><td>WAV · 24-bit · 48 kHz (archive master)</td></tr>
+  <tr><td>File name</td><td><code>$project_$date</code> — auto-filled from the project name</td></tr>
+</table>
+
+<p>Output directory: leave it empty. If you hard-code a path it will be written into the project file and break on anyone else's machine — including yours, if you move the session. REAPER asks for a folder on first render and remembers it afterwards.</p>
+
+<p>Because the loudness normalisation happens at render, the per-track compressor output gain only has to make the <em>speakers</em> match each other. The whole programme level is set once, at the end, to the platform standard.</p>
+
+<h2>What stock plug-ins cannot fix</h2>
+
+<p>Being honest about the limits saves time. None of these are recoverable in REAPER's built-in set:</p>
+
+<table>
+  <tr><th>Problem</th><th>Why</th></tr>
+  <tr><td>Clipping / distortion</td><td>The waveform is already truncated; the information is gone.</td></tr>
+  <tr><td>De-essing (harsh sibilance)</td><td>No dedicated de-esser. Multiband compression can reduce it, but the result is usually duller than a proper de-esser.</td></tr>
+  <tr><td>Room reverb</td><td>Requires spectral repair (iZotope RX De-reverb class tools). Cured by mic distance, soft furnishings and a small room.</td></tr>
+  <tr><td>Plosives (p/b pops)</td><td>Low cut helps with the rumble, but a hard pop overloads the capsule. Use a pop filter.</td></tr>
+  <tr><td>Keyboard / chair / paper noise</td><td>Transient and unpredictable; noise profiling cannot target it.</td></tr>
+</table>
+
+<h2>Recording checklist (fix it at the source)</h2>
+
+<ul>
+  <li>One file per person, original WAV — never an audio file sent through WhatsApp, WeChat or any messenger (those re-encode it).</li>
+  <li>At least 3 dB of headroom; never let the input meter touch 0 dB.</li>
+  <li>20 seconds of silence at the top of every recording — that is your noise profile.</li>
+  <li>Mic roughly a fist away, slightly off-axis, pop filter on.</li>
+  <li>Everyone records locally, not through the call platform's recorder.</li>
+</ul>
+
+<h2>Build it yourself, or start from a finished template</h2>
+
+<p>Everything above is enough to build this session from scratch. Here is what that costs, honestly:</p>
+
+<table>
+  <tr><th>&nbsp;</th><th>Build it yourself</th><th>Pre-built template</th></tr>
+  <tr><td>Setup time</td><td>2–3 hours first time, plus testing every parameter</td><td>5 minutes</td></tr>
+  <tr><td>Routing</td><td>Folder tracks, sends, auxiliary channels 3/4 — one wrong matrix cell and the voices get compressed twice</td><td>Already wired and tested</td></tr>
+  <tr><td>Compressor balance</td><td>Tune per-speaker output gain by ear until host and guests match</td><td>Balanced once, saved in the project</td></tr>
+  <tr><td>Render settings</td><td>Remember LUFS target, true-peak ceiling, sample rate, two formats, file naming — every time</td><td>Stored in the project file</td></tr>
+  <tr><td>Noise profile</td><td>20 seconds per speaker, per episode</td><td>Same — this one cannot be automated</td></tr>
+  <tr><td>Cost</td><td>Free</td><td>One-time purchase, no subscription</td></tr>
+</table>
+
+<p>If you enjoy building sessions, build it — the guide above is complete. If you would rather spend those hours recording, the template is the same session, already finished.</p>
+
+<div class="cta-box">
+  <h3>Rather not build all of this yourself?</h3>
+  <p>The <strong>Podcast Mix Template for REAPER</strong> is this exact session, pre-wired: four voice tracks with independent chains, sidechain ducking on the music bus, limiter on the master, render settings stored in the project and a 3-page quick start guide. Every plug-in used is built into REAPER — nothing to buy, nothing to install.</p>
+  <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">View the template — $19</a>
+</div>
+
+<footer>
+  <div>© 2026 NovaKit. All rights reserved.</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="refund.html">Refund</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
