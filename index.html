@@ -3,165 +3,387 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaKit — Premium Digital Products for Creators & Builders</title>
-<meta name="description" content="Quality templates, e-books, UI assets and digital tools. Instant delivery, lifetime updates.">
+<title>Podcast Mix Template for REAPER — NovaKit</title>
+<meta name="description" content="A fully configured REAPER 7 project for podcast and interview production. Built-in plug-ins only, four pre-wired voice tracks, automatic music ducking, −16 LUFS delivery. $19, instant download.">
 <meta name="google" content="notranslate">
+<link rel="canonical" href="https://novakit-yang.github.io/">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Podcast Mix Template for REAPER — NovaKit">
+<meta property="og:description" content="A fully configured REAPER 7 project for podcast production: built-in plug-ins only, four pre-wired voice tracks, automatic ducking, -16 LUFS delivery. $19.">
+<meta property="og:url" content="https://novakit-yang.github.io/">
+<meta property="og:image" content="https://novakit-yang.github.io/product-banner.png">
 <style>
   :root{
-    --bg:#0f1220; --card:#181c30; --card2:#1e2340; --text:#e8eaf6; --muted:#9aa3c7;
-    --accent:#7c6cff; --accent2:#4dd6c1; --border:#2a2f52;
+    --bg:#0A0B0D;
+    --surface:#0D0F12;
+    --raise:#12141A;
+    --line:rgba(255,255,255,.09);
+    --line-soft:rgba(255,255,255,.055);
+    --text:#F1F2F4;
+    --body:#A4AAB4;
+    --dim:#6E747D;
+    --accent:#A99BFF;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --w:1080px;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
-  a{color:var(--accent2);text-decoration:none}
-  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
-  header{padding:28px 0;display:flex;justify-content:space-between;align-items:center}
-  .logo{font-weight:800;font-size:22px;letter-spacing:.5px}
-  .logo span{color:var(--accent)}
-  nav a{margin-left:24px;color:var(--muted);font-size:15px}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--text);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  body::before{
+    content:"";position:fixed;inset:0 0 auto 0;height:560px;pointer-events:none;z-index:0;
+    background:radial-gradient(720px 380px at 22% -8%, rgba(124,108,255,.14), transparent 70%),
+               radial-gradient(560px 300px at 82% -12%, rgba(77,214,193,.07), transparent 70%);
+  }
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- header ---------- */
+  .site-head{position:sticky;top:0;z-index:20;background:rgba(10,11,13,.76);backdrop-filter:saturate(140%) blur(14px);border-bottom:1px solid var(--line-soft)}
+  .bar{height:62px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .brand span{color:var(--accent)}
+  nav{display:flex;gap:30px}
+  nav a{font-size:13.5px;color:var(--body);transition:color .18s}
   nav a:hover{color:var(--text)}
-  .hero{padding:72px 0 48px;text-align:center}
-  .hero h1{font-size:44px;line-height:1.2;font-weight:800}
-  .hero h1 em{font-style:normal;color:var(--accent)}
-  .hero p{margin:20px auto 0;max-width:620px;color:var(--muted);font-size:18px}
-  .badge{display:inline-block;background:var(--card2);border:1px solid var(--border);color:var(--accent2);font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:22px}
-  .cta{display:inline-block;margin-top:30px;background:var(--accent);color:#fff;font-weight:600;padding:14px 34px;border-radius:12px;font-size:16px}
-  .cta:hover{filter:brightness(1.1)}
-  section{padding:48px 0}
-  h2{font-size:28px;margin-bottom:28px;text-align:center}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px}
-  .card .ico{font-size:30px}
-  .card h3{margin:12px 0 8px;font-size:19px}
-  .card p{color:var(--muted);font-size:15px}
-  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-  .why div{background:var(--card2);border-radius:12px;padding:18px 20px;font-size:15px}
-  .why b{color:var(--accent2)}
-  .price{background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center}
-  .price .big{font-size:40px;font-weight:800;color:var(--accent)}
-  .price p{color:var(--muted);margin-top:10px}
-  .support{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center}
-  .support a{font-size:18px;font-weight:600}
-  footer{border-top:1px solid var(--border);margin-top:40px;padding:26px 0;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-  footer a{margin-left:18px}
+  .nav-buy{display:none}
+
+  /* ---------- hero ---------- */
+  .hero{padding:86px 0 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:600}
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(169,155,255,.16)}
+  h1{
+    margin-top:22px;
+    font-size:clamp(31px,5.4vw,58px);
+    line-height:1.05;
+    letter-spacing:-.035em;
+    font-weight:680;
+  }
+  h1 .dim{color:#8E949E}
+  .lede{margin-top:22px;max-width:600px;font-size:17.5px;line-height:1.7;color:var(--body)}
+  .actions{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:34px}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--text);color:#0A0B0D;
+    font-size:15px;font-weight:640;letter-spacing:-.005em;
+    padding:13px 24px;border-radius:9px;
+    transition:transform .16s ease, box-shadow .16s ease, background .16s;
+    box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 10px 30px -12px rgba(255,255,255,.25);
+  }
+  .btn:hover{background:#fff;transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 16px 34px -14px rgba(255,255,255,.34)}
+  .ghost{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;color:var(--body);border-bottom:1px solid transparent;padding-bottom:2px;transition:color .18s,border-color .18s}
+  .ghost:hover{color:var(--text);border-color:rgba(255,255,255,.28)}
+  .ghost span{transition:transform .18s}
+  .ghost:hover span{transform:translateX(3px)}
+  .meta{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;font-size:12.8px;color:var(--dim);letter-spacing:.005em}
+  .meta span{white-space:nowrap}
+  .meta span+span::before{content:"·";padding:0 10px;color:#3C4048}
+  .note{margin-top:26px;font-size:12.8px;color:var(--dim)}
+
+  /* ---------- screenshot ---------- */
+  .shot{margin-top:60px;position:relative}
+  .shot::after{
+    content:"";position:absolute;left:8%;right:8%;bottom:-26px;height:70px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);filter:blur(18px);z-index:-1;
+  }
+  .shot img{
+    display:block;width:100%;height:auto;border-radius:13px;
+    border:1px solid var(--line);
+    box-shadow:0 40px 80px -40px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.5);
+    background:#15171B;
+  }
+  .shot figcaption{margin-top:16px;font-size:12.5px;color:var(--dim);display:flex;gap:12px;align-items:baseline;letter-spacing:.005em}
+  .shot .idx{font-family:var(--mono);font-size:11px;color:#5A606A;letter-spacing:.06em}
+
+  /* ---------- sections ---------- */
+  .sec{padding:96px 0 0}
+  .sec-head{max-width:640px}
+  .label{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:600}
+  h2{margin-top:14px;font-size:clamp(26px,3vw,34px);line-height:1.18;letter-spacing:-.028em;font-weight:660}
+  .sec-head p{margin-top:14px;color:var(--body);font-size:16px}
+
+  /* spec list */
+  .spec-list{margin-top:46px;border-top:1px solid var(--line)}
+  .spec-list .row:last-child{border-bottom:0}
+  .spec-list .row{
+    display:grid;grid-template-columns:272px 1fr;gap:46px;
+    padding:25px 0 26px;border-bottom:1px solid var(--line-soft);align-items:start;
+  }
+  .spec-list .k{display:flex;gap:15px;align-items:baseline}
+  .num{font-family:var(--mono);font-size:11px;color:#545A64;letter-spacing:.06em}
+  .spec-list h3{font-size:15.5px;font-weight:600;letter-spacing:-.012em;line-height:1.5}
+  .spec-list p{font-size:14.5px;line-height:1.68;color:var(--body);max-width:600px}
+
+  /* guide row */
+  .guide-row{
+    display:flex;align-items:center;justify-content:space-between;gap:36px;
+    border-top:1px solid var(--line);
+    padding:36px 2px 4px;
+  }
+  .guide-row h3{font-size:19px;font-weight:620;letter-spacing:-.018em;margin-bottom:6px}
+  .guide-row p{font-size:14.5px;color:var(--body);max-width:620px}
+  .guide-row a{
+    white-space:nowrap;font-size:13.5px;color:var(--text);
+    display:inline-flex;align-items:center;gap:9px;
+    border:1px solid var(--line);border-radius:8px;padding:10px 16px;
+    background:rgba(255,255,255,.02);transition:background .18s,border-color .18s;
+  }
+  .guide-row a:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2)}
+  .guide-row a span{transition:transform .18s}
+  .guide-row a:hover span{transform:translateX(3px)}
+
+  /* ---------- buy ---------- */
+  .buy{
+    margin-top:40px;
+    display:grid;grid-template-columns:1fr 300px;gap:56px;align-items:center;
+    background:linear-gradient(180deg,#12141A,#0C0E11);
+    border:1px solid var(--line);border-radius:18px;padding:44px 46px;
+    box-shadow:0 30px 60px -40px rgba(0,0,0,.9);
+  }
+  .buy h2{margin-top:12px;font-size:30px}
+  .buy-copy p{margin-top:12px;color:var(--body);font-size:15px;max-width:440px}
+  .buy-act{padding-left:44px;border-left:1px solid var(--line)}
+  .amount{display:flex;align-items:baseline;gap:2px;font-weight:660;letter-spacing:-.04em;font-size:46px;line-height:1}
+  .amount .cur{font-size:24px;color:#8E949E;font-weight:560;margin-right:1px}
+  .amount .unit{font-size:11.5px;letter-spacing:.12em;color:var(--dim);margin-left:9px;font-weight:600}
+  .buy-act .btn{width:100%;margin-top:20px;padding:14px 20px}
+  .fine{margin-top:14px;font-size:12px;line-height:1.7;color:var(--dim)}
+  .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;margin-top:14px}
+  .trust div{background:var(--surface);padding:14px 18px;font-size:12.5px;color:var(--body)}
+  .trust b{display:block;color:var(--text);font-weight:600;font-size:12.5px;margin-bottom:2px}
+
+  /* ---------- faq ---------- */
+  .faq{margin-top:40px;border-top:1px solid var(--line)}
+  details{border-bottom:1px solid var(--line-soft)}
+  summary:hover{color:#fff}
+  summary{
+    list-style:none;cursor:pointer;padding:22px 2px;
+    display:flex;justify-content:space-between;align-items:center;gap:24px;
+    font-size:15.5px;font-weight:560;letter-spacing:-.012em;color:var(--text);
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::marker{content:""}
+  summary::after{content:"+";font-size:19px;font-weight:300;line-height:1;color:#8B919B;transition:transform .22s,color .22s}
+  details[open] summary::after{transform:rotate(45deg);color:var(--text)}
+  details p{padding:0 2px 24px;font-size:14.5px;line-height:1.7;color:var(--body);max-width:760px}
+  details[open] summary{padding-bottom:14px}
+
+  /* ---------- finale ---------- */
+  .finale{margin-top:88px;border-top:1px solid var(--line);padding-top:56px}
+  .fin{display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+  .fin h2{font-size:26px;margin:0}
+  .fin p{margin-top:8px;font-size:14.5px;color:var(--body)}
+
+  /* ---------- footer ---------- */
+  footer{margin-top:56px;border-top:1px solid var(--line);padding:36px 0 56px}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;font-size:12.5px;color:var(--dim)}
+  .foot .brand{font-size:14px}
+  .foot nav{gap:22px}
+  .foot nav a{font-size:12.5px;color:var(--dim)}
+  .foot nav a:hover{color:var(--text)}
+  .foot .mail{color:var(--body)}
+  .foot .mail:hover{color:var(--accent)}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:860px){
+    .buy{grid-template-columns:1fr;gap:30px;padding:34px 26px}
+    .buy-act{padding-left:0;border-left:0;border-top:1px solid var(--line);padding-top:26px}
+    .trust{grid-template-columns:1fr 1fr}
+    .spec-list .row:last-child{border-bottom:0}
+  .spec-list .row{grid-template-columns:1fr;gap:8px}
+    .guide-row{flex-direction:column;align-items:flex-start;gap:16px}
+    .hero{padding-top:64px}
+    .sec{padding-top:72px}
+    footer{margin-top:72px}
+  }
+  @media(max-width:560px){
+    .wrap{padding:0 20px}
+    nav{gap:0}
+    nav a:not(.nav-buy){display:none}
+    .nav-buy{display:inline-flex;background:var(--text);color:#0A0B0D;font-size:12.5px;font-weight:640;padding:7px 13px;border-radius:7px}
+    .meta{flex-direction:column;align-items:flex-start;gap:3px;font-size:12px}
+    .meta span+span::before{display:none}
+    .hero{padding-top:52px}
+    .lede{font-size:16px}
+    .actions{gap:18px;margin-top:28px}
+    .shot{margin-top:40px}
+    .shot figcaption{flex-direction:column;gap:4px}
+    .buy h2{font-size:26px}
+    .amount{font-size:40px}
+    .trust{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="logo">Nova<span>Kit</span></div>
+
+<header class="site-head">
+  <div class="wrap bar">
+    <a class="brand" href="index.html">Nova<span>Kit</span></a>
     <nav>
-      <a href="#products">Products</a>
+      <a href="#products">Product</a>
       <a href="reaper-podcast-workflow.html">Guide</a>
       <a href="#pricing">Pricing</a>
       <a href="#support">Support</a>
+      <a class="nav-buy" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">Buy — $19</a>
     </nav>
-  </header>
-
-  <div class="hero">
-    <div class="badge">⚡ Instant digital delivery</div>
-    <h1>Premium digital products<br>for <em>creators & builders</em></h1>
-    <p>Templates, e-books, UI assets and lightweight tools — made to save you hours of work. Buy once, use forever.</p>
-    <a class="cta" href="#products">Browse Products</a>
   </div>
+</header>
 
-  <section id="products">
-    <h2>Featured Product</h2>
-    <div class="product-card">
-      <img src="novakit-cover.png" alt="REAPER Podcast Mix Template" class="cover">
-      <div class="product-info">
-        <h3>Podcast Mix Template for REAPER</h3>
-        <p class="tagline">A fully configured REAPER project for podcast &amp; interview production. Open it, drop each speaker onto their own track, and start mixing.</p>
-        <ul>
-          <li>All FX chains built with REAPER's built-in plug-ins — <b>zero third-party dependencies</b></li>
-          <li>4 pre-wired voice tracks (HOST + GUEST 1–3), expandable by duplication</li>
-          <li>Automatic music ducking, built-in noise reduction, non-destructive processing</li>
-          <li>Loudness normalized to −16 LUFS — MP3 + WAV rendered in one pass</li>
-          <li>Includes a 3-page Quick Start PDF</li>
-        </ul>
-        <div class="buyrow">
-          <span class="p">$19</span>
-          <a class="cta" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">Buy Now</a>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow"><span class="dot"></span>REAPER 7 project template</p>
+      <h1>Podcast Mix Template<br><span class="dim">for REAPER.</span></h1>
+      <p class="lede">A fully configured REAPER project for podcast and interview production. Open it, drop each speaker onto their own track, and start mixing — every FX chain is already built.</p>
+      <div class="actions">
+        <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">Buy now — $19</a>
+        <a class="ghost" href="reaper-podcast-workflow.html">Read the free guide <span aria-hidden="true">→</span></a>
+      </div>
+      <p class="meta"><span>Instant download</span><span>3-page Quick Start PDF</span><span>Requires REAPER 7 or later</span></p>
+    </div>
+
+    <div class="wrap">
+      <figure class="shot">
+        <img src="product-banner.png" width="1470" height="682" alt="REAPER project window: MASTER, MUSIC BUS, DIALOGUE BUS with HOST and GUEST 1–3, and SFX BUS">
+        <figcaption><span class="idx">01</span>The project window — MASTER, MUSIC BUS, DIALOGUE BUS (HOST + GUEST 1–3) and SFX BUS, with every FX chain pre-built.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="products">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">What you get</p>
+        <h2>Four tracks, four chains,<br>nothing to set up.</h2>
+        <p>The routing, the processing and the render settings are already in the project file. You bring the recordings.</p>
+      </div>
+
+      <div class="spec-list">
+        <div class="row">
+          <div class="k"><span class="num">01</span><h3>Built-in plug-ins only</h3></div>
+          <p>Every chain is made from REAPER's stock plug-ins. Nothing extra to buy, nothing to install, no missing-plugin warnings when the project opens.</p>
         </div>
-        <p class="fine">REAPER 7+ · Instant download · Secure checkout by Creem · Requires REAPER (sold separately)</p>
+        <div class="row">
+          <div class="k"><span class="num">02</span><h3>Four voice tracks, pre-wired</h3></div>
+          <p>HOST and GUEST 1–3, each with its own chain. Duplicate any guest track and the copy stays inside the DIALOGUE BUS, ready for a fifth speaker.</p>
+        </div>
+        <div class="row">
+          <div class="k"><span class="num">03</span><h3>Automatic music ducking</h3></div>
+          <p>A sidechain on the DIALOGUE BUS pulls the music down the moment someone speaks and lifts it when they stop. No volume automation to draw.</p>
+        </div>
+        <div class="row">
+          <div class="k"><span class="num">04</span><h3>Loudness done in one pass</h3></div>
+          <p>The master is limited to −1.0 dBTP and normalized to −16 LUFS. A single render exports the MP3 upload version and the WAV master together.</p>
+        </div>
+        <div class="row">
+          <div class="k"><span class="num">05</span><h3>Noise floor learned in 20 seconds</h3></div>
+          <p>Play the silence at the top of the recording once per episode and the NOISE REDUCTION unit learns that room. No profiles to manage.</p>
+        </div>
+        <div class="row">
+          <div class="k"><span class="num">06</span><h3>Your recordings stay untouched</h3></div>
+          <p>All processing is insert-based, so source files are never modified. If a recording is already clean, bypass the noise reduction and keep going.</p>
+        </div>
+      </div>
+
+      <div class="guide-row">
+        <div>
+          <h3>Want to build it yourself instead?</h3>
+          <p>The full workflow is written out, free: track layout, noise reduction with ReaFir, level matching, sidechain ducking and −16 LUFS delivery.</p>
+        </div>
+        <a href="reaper-podcast-workflow.html">Read the guide <span aria-hidden="true">→</span></a>
       </div>
     </div>
-    <style>
-      .product-card{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:28px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;align-items:center}
-      @media(max-width:760px){.product-card{grid-template-columns:1fr}}
-      .product-card .cover{width:100%;border-radius:10px;display:block;border:1px solid var(--border)}
-      .product-card h3{font-size:24px;margin-bottom:8px}
-      .product-card .tagline{color:var(--muted);margin-bottom:14px}
-      .product-card ul{margin:0 0 18px 18px;color:var(--text);font-size:15px}
-      .product-card li{margin-bottom:6px}
-      .buyrow{display:flex;align-items:center;gap:18px}
-      .buyrow .p{font-size:34px;font-weight:800;color:var(--accent)}
-      .product-card .fine{color:var(--muted);font-size:13px;margin-top:12px}
-    </style>
   </section>
 
-  <section>
-    <h2>Free Guide</h2>
-    <div class="guide-teaser">
+  <section class="sec" id="pricing">
+    <div class="wrap">
+      <div class="buy">
+        <div class="buy-copy">
+          <p class="label">One-time purchase</p>
+          <h2>Get the template</h2>
+          <p>The .RPP project file, the 3-page Quick Start PDF and every future update. No subscription, no upsell.</p>
+        </div>
+        <div class="buy-act">
+          <div class="amount"><span class="cur">$</span>19<span class="unit">USD</span></div>
+          <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">Buy now</a>
+          <p class="fine">Secure checkout and instant delivery by Creem.<br>REAPER 7+ required — sold separately.</p>
+        </div>
+      </div>
+
+      <div class="trust">
+        <div><b>Instant delivery</b>Files available right after checkout</div>
+        <div><b>Lifetime updates</b>Pay once, keep every future version</div>
+        <div><b>Commercial license</b>Use it on client and paid work</div>
+        <div><b>Real support</b>A reply within 24 hours</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="support">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Questions</p>
+        <h2>Before you buy</h2>
+      </div>
+
+      <div class="faq">
+        <details open>
+          <summary>Do I need REAPER 7?</summary>
+          <p>Yes — the project is saved in the REAPER 7 format. Any later version opens it without conversion. REAPER is sold separately by Cockos; the evaluation licence is fully functional, so you can try the template before you buy a licence.</p>
+        </details>
+        <details>
+          <summary>Will it work in another DAW?</summary>
+          <p>No. This is a REAPER project file, not a set of audio files or presets — its value is the routing, the stock plug-in chains and the render settings, all of which are REAPER-specific. The free written guide, however, applies to any DAW.</p>
+        </details>
+        <details>
+          <summary>What if I have more than four speakers?</summary>
+          <p>Select any guest track, duplicate it, and the new track inherits the full chain and stays inside the DIALOGUE BUS. There is no track limit — but each person needs their own recording.</p>
+        </details>
+        <details>
+          <summary>Is audio included?</summary>
+          <p>No. The MUSIC and SFX tracks are empty on purpose, so you can drop in your own royalty-cleared audio. No music, intros or sound effects are bundled.</p>
+        </details>
+        <details>
+          <summary>What is the refund policy?</summary>
+          <p>Digital files cannot be returned, so sales are generally final. If a file is corrupted, does not match the description, or you were charged twice, write within 7 days and you get a full refund or a replacement. Details in the <a href="refund.html" style="border-bottom:1px solid rgba(255,255,255,.2)">refund policy</a>.</p>
+        </details>
+      </div>
+
+      <p class="note">Still unsure? Email <a class="mail" href="mailto:yangcq710@outlook.com" style="color:#DDDFE3;border-bottom:1px solid rgba(255,255,255,.22)">yangcq710@outlook.com</a> — replies within 24 hours.</p>
+    </div>
+  </section>
+  <section class="finale">
+    <div class="wrap fin">
       <div>
-        <h3>How to Mix a Multi-Speaker Podcast in REAPER</h3>
-        <p>The complete workflow, written out in full: track layout, noise reduction with ReaFir, level matching with ReaComp, automatic music ducking via sidechain, and −16 LUFS delivery. No email required — read it and build it yourself if you prefer.</p>
+        <h2>Ready when you are.</h2>
+        <p>One project file. Every chain built. $19, one time.</p>
       </div>
-      <a class="cta" href="reaper-podcast-workflow.html">Read the guide</a>
-    </div>
-    <style>
-      .guide-teaser{display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px}
-      @media(max-width:700px){.guide-teaser{grid-template-columns:1fr}}
-      .guide-teaser h3{font-size:21px;margin-bottom:8px}
-      .guide-teaser p{color:var(--muted);font-size:15px}
-      .guide-teaser .cta{margin-top:0;white-space:nowrap}
-    </style>
-  </section>
-
-  <section>
-    <h2>More From NovaKit</h2>
-    <div class="grid">
-      <div class="card"><div class="ico">📋</div><h3>Templates</h3><p>Notion templates, resume/CV templates, spreadsheets and workflow systems — ready to use out of the box.</p></div>
-      <div class="card"><div class="ico">📚</div><h3>E-books & Guides</h3><p>Practical, action-focused guides to help you learn faster and apply immediately.</p></div>
-      <div class="card"><div class="ico">🎨</div><h3>UI Assets & Design Resources</h3><p>Icon packs, illustration bundles and UI components for your next project.</p></div>
-      <div class="card"><div class="ico">🧰</div><h3>Digital Tools</h3><p>Lightweight utilities and scripts that automate the boring parts of your work.</p></div>
+      <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">Buy now — $19</a>
     </div>
   </section>
+</main>
 
-  <section>
-    <h2>Why Buy From Us</h2>
-    <div class="why">
-      <div><b>Instant delivery</b> — files available immediately after checkout</div>
-      <div><b>Lifetime updates</b> — pay once, get every future version</div>
-      <div><b>Clear license</b> — use for personal and commercial projects</div>
-      <div><b>Real support</b> — we reply to every email within 24 hours</div>
-    </div>
-  </section>
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="index.html">Nova<span>Kit</span></a>
+    <nav>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="refund.html">Refunds</a>
+    </nav>
+    <div>© 2026 NovaKit · yangcq710@outlook.com</div>
+  </div>
+</footer>
 
-  <section id="pricing">
-    <h2>Pricing</h2>
-    <div class="price">
-      <div class="big">$19</div>
-      <p>Podcast Mix Template for REAPER — one-time payment, lifetime updates.<br>Secure checkout and instant delivery handled by Creem.</p>
-    </div>
-  </section>
-
-  <section id="support">
-    <h2>Support & Contact</h2>
-    <div class="support">
-      <p style="color:var(--muted);margin-bottom:12px">Questions before or after purchase? We reply within 24 hours.</p>
-      <a href="mailto:yangcq710@outlook.com">📧 yangcq710@outlook.com</a>
-    </div>
-  </section>
-
-  <footer>
-    <div>© 2026 NovaKit. All rights reserved.</div>
-    <div>
-      <a href="terms.html">Terms of Service</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="refund.html">Refund Policy</a>
-    </div>
-  </footer>
-</div>
 </body>
 </html>
