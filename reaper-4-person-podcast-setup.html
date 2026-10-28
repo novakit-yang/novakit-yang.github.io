@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>A 4-Person Podcast Setup in REAPER: Routing, Chains and One Render</title>
+<meta name="description" content="How to build a REAPER session for four podcast speakers: one chain per voice, a shared dialogue bus, sidechain ducking for music, and a single render for MP3 and WAV.">
+<link rel="canonical" href="https://novakit-yang.github.io/reaper-4-person-podcast-setup.html">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A 4-Person Podcast Setup in REAPER: Routing, Chains and One Render">
+<meta property="og:description" content="How to build a REAPER session for four podcast speakers: one chain per voice, a shared dialogue bus, sidechain ducking for music, and a single render for MP3 and WAV.">
+<meta property="og:url" content="https://novakit-yang.github.io/reaper-4-person-podcast-setup.html">
+<meta property="og:image" content="https://novakit-yang.github.io/product-banner.png">
+<style>
+  :root{
+    --bg:#0A0B0D; --card:#101216; --card2:#15181D; --text:#F1F2F4; --bodyc:#A4AAB4;
+    --muted:#8A9098; --dim:#6E747D; --accent:#A99BFF; --border:rgba(255,255,255,.09);
+    --soft:rgba(255,255,255,.055);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0 0 auto 0;height:420px;pointer-events:none;z-index:0;
+    background:radial-gradient(620px 320px at 18% -10%, rgba(124,108,255,.11), transparent 70%);
+  }
+  .wrap{max-width:768px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+  a{color:#D3CCFF;text-decoration:none;border-bottom:1px solid rgba(169,155,255,.26)}
+  a:hover{border-color:rgba(169,155,255,.6)}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--soft);margin-bottom:56px}
+  .logo{font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .logo span{color:var(--accent)}
+  nav a{margin-left:26px;color:var(--muted);font-size:13.5px;border-bottom:0}
+  nav a:hover{color:var(--text)}
+  .kicker{color:var(--dim);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+  h1{font-size:clamp(29px,4.2vw,39px);line-height:1.18;letter-spacing:-.03em;font-weight:680;margin-bottom:18px}
+  .meta{color:var(--dim);font-size:13px;margin-bottom:36px}
+  .lede{font-size:17.5px;line-height:1.72;color:var(--bodyc);margin-bottom:36px}
+  h2{font-size:22.5px;letter-spacing:-.02em;margin:58px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  h3{font-size:16.5px;margin:30px 0 8px;color:#E4E6EA;letter-spacing:-.01em}
+  p{margin-bottom:16px;color:#CDD1D7}
+  ul,ol{margin:0 0 18px 20px;color:#CDD1D7}
+  li{margin-bottom:9px}
+  code{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:2px 6px;font-size:13.5px;color:#D9D3FF;font-family:var(--mono)}
+  pre{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;font-size:13px;line-height:1.65;color:#D9D3FF;font-family:var(--mono)}
+  .note{background:var(--card);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 22px;font-size:14.5px;color:#C6CAD1}
+  .warn{border-left-color:#D08A55}
+  table{width:100%;border-collapse:collapse;margin:0 0 24px;font-size:14.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--soft);color:#CDD1D7}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.12em}
+  .cta-box{background:linear-gradient(180deg,#12141A,#0C0E11);border:1px solid var(--border);border-radius:16px;padding:32px;margin:58px 0 20px}
+  .cta-box h3{margin-top:0;font-size:20px;color:var(--text)}
+  .cta-box p{color:var(--bodyc);font-size:14.5px;margin-bottom:20px}
+  .btn{display:inline-block;background:#F1F2F4;color:#0A0B0D;font-weight:640;padding:12px 22px;border-radius:9px;font-size:14.5px;border:0}
+  .btn:hover{background:#fff}
+  footer{border-top:1px solid var(--border);margin-top:72px;padding:26px 0 56px;color:var(--dim);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a{margin-left:18px;border-bottom:0;color:var(--dim)}
+  footer a:hover{color:var(--text)}
+  @media(max-width:600px){
+    .wrap{padding:0 20px}
+    h1{font-size:27px}
+    h2{font-size:20px;margin-top:44px}
+    nav a{margin-left:14px;font-size:12.5px}
+    header{margin-bottom:44px}
+  }
+
+  .related{margin:56px 0 0;padding-top:32px;border-top:1px solid var(--border)}
+  .related h3{font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin:0 0 16px}
+  .related a{display:block;padding:14px 0;border-bottom:1px solid var(--soft);color:#D3CCFF;border-bottom-width:1px}
+  .related a:last-child{border-bottom:0}
+  .related span{display:block;color:var(--muted);font-size:13px;margin-top:3px;border:0}
+
+  .related a{color:#E9E6FF;font-size:15px;font-weight:500;letter-spacing:-.01em;transition:color .18s}
+  .related a:hover{color:#fff}
+  .related a span{font-weight:400;color:#8A9098;font-size:13px;line-height:1.55;margin-top:4px}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "A 4-Person Podcast Setup in REAPER: Routing, Chains and One Render",
+  "description": "How to build a REAPER session for four podcast speakers: one chain per voice, a shared dialogue bus, sidechain ducking for music, and a single render for MP3 and WAV.",
+  "author": {"@type": "Organization", "name": "NovaKit"},
+  "publisher": {"@type": "Organization", "name": "NovaKit"},
+  "mainEntityOfPage": "https://novakit-yang.github.io/reaper-4-person-podcast-setup.html"
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">Nova<span>Kit</span></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="reaper-podcast-workflow.html">Guides</a>
+    <a href="index.html#products">Template</a>
+  </nav>
+</header>
+
+<div class="kicker">Session Design</div>
+<h1>A 4-Person Podcast Setup in REAPER: Routing, Chains and One Render</h1>
+<div class="meta">By NovaKit &middot; 7 min read &middot; REAPER 7</div>
+
+<p class="lede">Four people means four rooms, four microphones and four different noise floors in one episode. The session that handles it is not complicated &mdash; it is just built in a specific order, and every part of it exists to keep one speaker's problems from landing on another's.</p>
+
+<h2>What four speakers actually costs you</h2>
+
+<p>The temptation is to drop four files onto one track and put one chain across them. It sounds acceptable in a quiet room and falls apart everywhere else:</p>
+
+<ul>
+  <li><strong>Four noise floors.</strong> One guest has a laptop fan, one has a fridge, one has street noise. A single noise profile can only target one of them &mdash; and it damages the other three voices while trying.</li>
+  <li><strong>Four distances.</strong> Someone sits 10 cm from the mic, someone sits 40 cm away. In one shared chain, the quiet guest is compressed against a threshold set for the loud host.</li>
+  <li><strong>Four tones.</strong> A dynamic mic in a treated room and a USB mic in a kitchen do not want the same processing.</li>
+</ul>
+
+<p>So the session is built around one voice track per person, each with its own chain, all feeding a shared dialogue bus.</p>
+
+<h2>The layout</h2>
+
+<pre>MASTER
+MUSIC BUS
+  MUSIC          (empty &mdash; your background music)
+DIALOGUE BUS
+  HOST
+  GUEST 1
+  GUEST 2
+  GUEST 3
+SFX BUS
+  SFX            (empty &mdash; your transitions)</pre>
+
+<p>Each bus is a folder track: set it as a folder parent, then indent the child tracks beneath it. Folder tracks give you three things for free &mdash; one fader for the group, one place to insert group processing, and one point to send from, which is what the music ducking depends on.</p>
+
+<h2>Inside one voice track</h2>
+
+<p>Every speaker's chain runs in the same order, because the order is what makes the stages independent of each other:</p>
+
+<ol>
+  <li><strong>Level and tone.</strong> Get the voice roughly right before anything dynamic touches it.</li>
+  <li><strong>Noise reduction.</strong> In a four-person session this is the third insert in the chain. REAPER's <code>ReaFir</code> in subtract mode learns the room from a noise profile &mdash; twenty seconds of silence at the top of that speaker's recording, learned once per episode. Because each track has its own instance, each guest's fridge is removed by its own profile.</li>
+  <li><strong>Compression.</strong> Now that the noise floor is gone, the compressor is reacting to the voice instead of to the room.</li>
+</ol>
+
+<p>Putting noise reduction after compression would mean the compressor is triggered by noise the listener never hears. Putting it before the level stage would mean learning a profile from a signal that is still the wrong level.</p>
+
+<h2>Making four voices match</h2>
+
+<p>The goal is not four identical tracks, it is four voices that sound like they are in the same conversation. Two rules do most of the work:</p>
+
+<ul>
+  <li><strong>Match with the compressor's output gain, not the fader.</strong> The fader is your mix move; the compressor output is your calibration. Set the calibration first, then mix.</li>
+  <li><strong>Do not chase perfection per speaker.</strong> If one guest is in a much worse room, they will still sound like a worse room. Making them sound like a <em>compressed</em> worse room is not an improvement.</li>
+</ul>
+
+<p>Whole-programme loudness is not set here at all. That happens once, at render &mdash; see the loudness guide below.</p>
+
+<h2>Adding a fifth speaker</h2>
+
+<p>Select any guest track and duplicate it. The copy inherits the full chain and stays inside the dialogue bus folder, so the routing, the music ducking and the master chain all keep working without touching anything. There is no separate &ldquo;multi-guest&rdquo; mode to configure.</p>
+
+<h2>Music and transitions</h2>
+
+<p>The music and SFX buses ship empty, deliberately: nothing in the session assumes a particular bed or stinger. Put your music on the <code>MUSIC</code> track and it will be ducked automatically by the dialogue bus sidechain. The SFX bus carries transitions and is left out of that sidechain, so a whoosh is not pulled down by a voice.</p>
+
+<h2>One render, two files</h2>
+
+<p>The last step is configured once and then forgotten, because REAPER stores render settings inside the project file:</p>
+
+<table>
+  <tr><th>Setting</th><th>Value</th></tr>
+  <tr><td>Normalise / limit</td><td>LUFS-I, target &minus;16, true peak &minus;1.0 dBTP</td></tr>
+  <tr><td>Sample rate</td><td>48 kHz</td></tr>
+  <tr><td>Primary format</td><td>MP3 &middot; 256 kbps (the upload version)</td></tr>
+  <tr><td>Secondary format</td><td>WAV &middot; 24-bit (the archive master)</td></tr>
+  <tr><td>File name</td><td><code>$project_$date</code>, filled from the project name</td></tr>
+</table>
+
+<p>Leave the output directory empty. Hard-code a path and it gets written into the project file, then breaks the moment the session moves to another machine. REAPER asks for a folder on the first render and remembers it afterwards.</p>
+
+<h2>What the session actually saves you</h2>
+
+<p>Building this from scratch the first time takes two to three hours, and most of that time goes into testing rather than typing: confirming the send lands on channels 3/4 and not on the audible pair, confirming the compressor's detector is reading the auxiliary input, confirming the render normalises rather than limits. Every one of those is a single wrong click away from a mix that sounds fine in the room and wrong on the platform.</p>
+
+<p>None of it is difficult. All of it is the kind of thing you should only have to get right once.</p>
+
+<h2>Failure modes worth knowing before you start</h2>
+
+<table>
+  <tr><th>Symptom</th><th>Cause</th></tr>
+  <tr><td>One guest is clearly quieter, and compression does not fix it</td><td>The chain is compensating for a level problem. Trim the item first, then let the chain work on tone and dynamics</td></tr>
+  <tr><td>Noise reduction removes the room but leaves a watery tail on the voice</td><td>Noise profile learned from a section that already contained breathing or a mouse click. Re-learn from true silence, and keep the reduction modest</td></tr>
+  <tr><td>Guest 3's noise is still there after profiling</td><td>One profile is being applied to all four tracks. Each track needs its own instance, learned from its own recording</td></tr>
+  <tr><td>Episode loudness drifts from week to week</td><td>Loudness was set by ear per episode rather than by the render's normalisation</td></tr>
+  <tr><td>Session opens with a missing-file dialog after a colleague sends it</td><td>The project was saved with absolute paths. Consolidate media before sending it anywhere</td></tr>
+</table>
+
+<h2>Checklist</h2>
+
+<ul>
+  <li>One voice track per speaker, each with its own full chain, all inside the dialogue bus folder;</li>
+  <li>Music and SFX buses kept separate, with only the music bus listening to the dialogue sidechain;</li>
+  <li>Render settings saved in the project, not in preferences.</li>
+</ul>
+
+<h2>Recording checklist</h2>
+
+<ul>
+  <li>One file per person, original WAV &mdash; never a file that has been through a messenger app, those re-encode it;</li>
+  <li>At least 3 dB of headroom, never touching 0 dB;</li>
+  <li>Twenty seconds of silence at the top of every recording &mdash; that is the noise profile;</li>
+  <li>Everyone records locally rather than through the call platform's recorder;</li>
+  <li>Mic roughly a fist away, slightly off-axis, pop filter on.</li>
+</ul>
+
+<div class="cta-box">
+  <h3>This session, already built</h3>
+  <p>The <strong>Podcast Mix Template for REAPER</strong> is this exact layout: four voice tracks with independent chains, folder buses for music and SFX, ducking wired, limiter on the master and the render settings saved inside the project. Duplicate a guest track for a fifth speaker and the copy stays in the dialogue bus.</p>
+  <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">View the template &mdash; $19</a>
+</div>
+
+<div class="related">
+  <h3>More guides</h3>
+<a href="reaper-podcast-workflow.html">How to Mix a Multi-Speaker Podcast in REAPER<span>The full routing and processing chain, from raw files to a finished episode.</span></a><a href="reaper-sidechain-ducking.html">Sidechain Ducking in REAPER<span>One send, and the music gets out of the way by itself.</span></a><a href="podcast-loudness-16-lufs.html">How to Hit −16 LUFS in REAPER<span>Integrated loudness, true peak, and why the limiter is not a volume knob.</span></a></div>
+
+<footer>
+  <div>&copy; 2026 NovaKit. All rights reserved.</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="refund.html">Refund</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

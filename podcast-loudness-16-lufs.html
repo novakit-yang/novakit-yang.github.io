@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>How to Hit −16 LUFS for a Podcast in REAPER (Stock Plug-Ins Only)</title>
+<meta name="description" content="A practical REAPER method for hitting −16 LUFS integrated with a −1.0 dBTP true-peak ceiling, using only stock plug-ins and the render dialog.">
+<link rel="canonical" href="https://novakit-yang.github.io/podcast-loudness-16-lufs.html">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Hit −16 LUFS for a Podcast in REAPER (Stock Plug-Ins Only)">
+<meta property="og:description" content="A practical REAPER method for hitting −16 LUFS integrated with a −1.0 dBTP true-peak ceiling, using only stock plug-ins and the render dialog.">
+<meta property="og:url" content="https://novakit-yang.github.io/podcast-loudness-16-lufs.html">
+<meta property="og:image" content="https://novakit-yang.github.io/product-banner.png">
+<style>
+  :root{
+    --bg:#0A0B0D; --card:#101216; --card2:#15181D; --text:#F1F2F4; --bodyc:#A4AAB4;
+    --muted:#8A9098; --dim:#6E747D; --accent:#A99BFF; --border:rgba(255,255,255,.09);
+    --soft:rgba(255,255,255,.055);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0 0 auto 0;height:420px;pointer-events:none;z-index:0;
+    background:radial-gradient(620px 320px at 18% -10%, rgba(124,108,255,.11), transparent 70%);
+  }
+  .wrap{max-width:768px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+  a{color:#D3CCFF;text-decoration:none;border-bottom:1px solid rgba(169,155,255,.26)}
+  a:hover{border-color:rgba(169,155,255,.6)}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--soft);margin-bottom:56px}
+  .logo{font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .logo span{color:var(--accent)}
+  nav a{margin-left:26px;color:var(--muted);font-size:13.5px;border-bottom:0}
+  nav a:hover{color:var(--text)}
+  .kicker{color:var(--dim);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+  h1{font-size:clamp(29px,4.2vw,39px);line-height:1.18;letter-spacing:-.03em;font-weight:680;margin-bottom:18px}
+  .meta{color:var(--dim);font-size:13px;margin-bottom:36px}
+  .lede{font-size:17.5px;line-height:1.72;color:var(--bodyc);margin-bottom:36px}
+  h2{font-size:22.5px;letter-spacing:-.02em;margin:58px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  h3{font-size:16.5px;margin:30px 0 8px;color:#E4E6EA;letter-spacing:-.01em}
+  p{margin-bottom:16px;color:#CDD1D7}
+  ul,ol{margin:0 0 18px 20px;color:#CDD1D7}
+  li{margin-bottom:9px}
+  code{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:2px 6px;font-size:13.5px;color:#D9D3FF;font-family:var(--mono)}
+  pre{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;font-size:13px;line-height:1.65;color:#D9D3FF;font-family:var(--mono)}
+  .note{background:var(--card);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 22px;font-size:14.5px;color:#C6CAD1}
+  .warn{border-left-color:#D08A55}
+  table{width:100%;border-collapse:collapse;margin:0 0 24px;font-size:14.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--soft);color:#CDD1D7}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.12em}
+  .cta-box{background:linear-gradient(180deg,#12141A,#0C0E11);border:1px solid var(--border);border-radius:16px;padding:32px;margin:58px 0 20px}
+  .cta-box h3{margin-top:0;font-size:20px;color:var(--text)}
+  .cta-box p{color:var(--bodyc);font-size:14.5px;margin-bottom:20px}
+  .btn{display:inline-block;background:#F1F2F4;color:#0A0B0D;font-weight:640;padding:12px 22px;border-radius:9px;font-size:14.5px;border:0}
+  .btn:hover{background:#fff}
+  footer{border-top:1px solid var(--border);margin-top:72px;padding:26px 0 56px;color:var(--dim);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a{margin-left:18px;border-bottom:0;color:var(--dim)}
+  footer a:hover{color:var(--text)}
+  @media(max-width:600px){
+    .wrap{padding:0 20px}
+    h1{font-size:27px}
+    h2{font-size:20px;margin-top:44px}
+    nav a{margin-left:14px;font-size:12.5px}
+    header{margin-bottom:44px}
+  }
+
+  .related{margin:56px 0 0;padding-top:32px;border-top:1px solid var(--border)}
+  .related h3{font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin:0 0 16px}
+  .related a{display:block;padding:14px 0;border-bottom:1px solid var(--soft);color:#D3CCFF;border-bottom-width:1px}
+  .related a:last-child{border-bottom:0}
+  .related span{display:block;color:var(--muted);font-size:13px;margin-top:3px;border:0}
+
+  .related a{color:#E9E6FF;font-size:15px;font-weight:500;letter-spacing:-.01em;transition:color .18s}
+  .related a:hover{color:#fff}
+  .related a span{font-weight:400;color:#8A9098;font-size:13px;line-height:1.55;margin-top:4px}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "How to Hit &minus;16 LUFS for a Podcast in REAPER (Stock Plug-Ins Only)",
+  "description": "A practical REAPER method for hitting −16 LUFS integrated with a −1.0 dBTP true-peak ceiling, using only stock plug-ins and the render dialog.",
+  "author": {"@type": "Organization", "name": "NovaKit"},
+  "publisher": {"@type": "Organization", "name": "NovaKit"},
+  "mainEntityOfPage": "https://novakit-yang.github.io/podcast-loudness-16-lufs.html"
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">Nova<span>Kit</span></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="reaper-podcast-workflow.html">Guides</a>
+    <a href="index.html#products">Template</a>
+  </nav>
+</header>
+
+<div class="kicker">Loudness &amp; Delivery</div>
+<h1>How to Hit &minus;16 LUFS for a Podcast in REAPER (Stock Plug-Ins Only)</h1>
+<div class="meta">By NovaKit &middot; 7 min read &middot; REAPER 7</div>
+
+<p class="lede">Loudness is the one delivery requirement that every podcast platform enforces and almost nobody measures properly. This is how to land on &minus;16 LUFS integrated with a &minus;1.0 dBTP ceiling inside REAPER, using nothing but what ships with the program.</p>
+
+<h2>Why &minus;16 LUFS, and why not &ldquo;as loud as possible&rdquo;</h2>
+
+<p>Every major platform has a target and turns louder material down to meet it:</p>
+
+<table>
+  <tr><th>Platform</th><th>Normalisation target</th></tr>
+  <tr><td>Apple Podcasts</td><td>&minus;16 LUFS (stereo)</td></tr>
+  <tr><td>Spotify</td><td>&minus;14 LUFS</td></tr>
+  <tr><td>YouTube</td><td>&minus;14 LUFS</td></tr>
+  <tr><td>Amazon Music / Audible</td><td>&minus;14 to &minus;16 LUFS</td></tr>
+</table>
+
+<p>The consequence is asymmetric, and this is the part people miss: platforms turn loud material <em>down</em>, they do not turn quiet material <em>up</em>. So a mix delivered at &minus;11 LUFS arrives at the listener at &minus;14 anyway, but with all the transient detail crushed out of it by your own limiter. A mix delivered at &minus;16 keeps its dynamics and lands exactly where it was intended.</p>
+
+<p>&minus;16 is therefore the practical choice: it is Apple's target, it is within a rounding error of everyone else's, and it leaves the mix sounding like a recording rather than a commercial.</p>
+
+<h2>Three numbers people mix up</h2>
+
+<table>
+  <tr><th>Measure</th><th>What it is</th><th>What it is for</th></tr>
+  <tr><td><strong>LUFS-I</strong> (integrated)</td><td>Loudness averaged across the whole programme</td><td>The delivery number. This is what &minus;16 refers to</td></tr>
+  <tr><td><strong>LUFS-S</strong> (short-term)</td><td>Loudness over a rolling ~3 second window</td><td>Catching a section that drifts loud or quiet</td></tr>
+  <tr><td><strong>dBTP</strong> (true peak)</td><td>Peak level, including the inter-sample peaks a normal meter misses</td><td>Avoiding distortion once the file is encoded to MP3 or AAC</td></tr>
+</table>
+
+<p>Peak level and loudness are not the same thing and cannot be traded for each other. A file can sit at &minus;1.0 dBTP and still be 8 LU too quiet.</p>
+
+<h2>Measure it inside REAPER, no plug-ins needed</h2>
+
+<p>Right-click the master track's VU meter and enable the loudness display. You get a live LUFS-M reading and, once you play from the start, an integrated figure that keeps updating. That is enough to answer &ldquo;is this episode in the right place?&rdquo; without installing a metering suite.</p>
+
+<p>Two practical notes:</p>
+
+<ul>
+  <li><strong>Play the whole episode.</strong> An integrated reading taken from the first 30 seconds is not an integrated reading. Intros are usually louder than conversation and will give you a misleading number.</li>
+  <li><strong>Do not measure a mono file as dual mono.</strong> The same signal in both channels sums to roughly 3 LU higher than a single channel. If a guest sent you a mono recording, check how REAPER is placing it before you trust the number.</li>
+</ul>
+
+<h2>Two ways to hit the target, one of them correct</h2>
+
+<p><strong>The wrong way:</strong> push the limiter until the meter reads &minus;16. This works numerically and ruins the mix. You are using a peak limiter as a gain control, so it flattens every transient in the programme to raise the average.</p>
+
+<p><strong>The right way:</strong> separate the two jobs. The limiter's only task is to stop peaks crossing the ceiling. The loudness job happens at render, where REAPER can apply one gain change to the finished file.</p>
+
+<p>Open <strong>File &rarr; Render</strong> and set the normalisation mode to LUFS-I with a target of &minus;16 and a true-peak limit of &minus;1.0 dBTP. REAPER measures the rendered programme and applies the correction automatically. Because the settings are stored inside the <code>.RPP</code> file, they travel with the project instead of living in your preferences &mdash; open the same session on another machine and the render is still correct.</p>
+
+<h2>Why the ceiling is &minus;1.0 dBTP and not 0.0</h2>
+
+<p>MP3 and AAC are lossy formats. The encoding process changes the waveform, and the reconstructed peaks can come out <em>higher</em> than the peaks in the WAV you started from. A file that measures &minus;0.1 dBTP before encoding can clip after it.</p>
+
+<p>&minus;1.0 dBTP is the margin that absorbs that overshoot. It costs you nothing audible and it is the number every major platform publishes as its delivery ceiling.</p>
+
+<div class="note"><strong>Order matters.</strong> Limit first, normalise second. If you normalise up to the target and then need more limiting, you will be limiting an already-normalised file and undoing the normalisation. The render dialog applies them in the correct order for you: it normalises, then limits to the ceiling.</div>
+
+<h2>Where this usually goes wrong</h2>
+
+<table>
+  <tr><th>Symptom</th><th>Cause</th></tr>
+  <tr><td>Sounds loud but flat and tiring</td><td>Loudness was raised with the limiter instead of at render</td></tr>
+  <tr><td>Episodes vary in level week to week</td><td>Target measured by ear, or from a short section</td></tr>
+  <tr><td>Distortion only on the MP3, not the WAV</td><td>No true-peak ceiling; lossy encoding pushed peaks over</td></tr>
+  <tr><td>Reaches &minus;16 on your machine, not on a client's</td><td>Render settings saved in preferences rather than in the project</td></tr>
+</table>
+
+<h2>If the recording already arrived too hot</h2>
+
+<p>Common in multi-speaker sessions: one guest recorded with their interface gain high and their file peaks near 0 dB, while everyone else sits 10 dB lower. This is recoverable, but the order matters.</p>
+
+<p>Pull that file down first, before it hits its own chain, using the item volume handle &mdash; not the track fader. Item volume happens before the chain, so the compressor on that track sees a signal in the right range instead of one that is permanently over threshold. Trim first, then process. Doing it the other way round means the compressor has already squashed the loud guest before you turned anything down, and turning the fader down afterwards only makes a squashed voice quieter.</p>
+
+<p>What is not recoverable is clipping. If the waveform is already flat-topped, the peaks are gone and no amount of gain staging brings them back. That is a re-record, or an honest note in the show notes.</p>
+
+<h2>What to check before you upload</h2>
+
+<table>
+  <tr><th>Check</th><th>Why it matters</th></tr>
+  <tr><td>Integrated loudness measured across the whole episode</td><td>A reading from the first minute is usually 1&ndash;2 LU off, because intros are louder than conversation</td></tr>
+  <tr><td>True peak under &minus;1.0 dBTP</td><td>MP3 and AAC encoding can push peaks above the source file</td></tr>
+  <tr><td>Both files exported in one pass</td><td>Re-rendering the second format separately invites a mismatch between what you uploaded and what you archived</td></tr>
+  <tr><td>Filename from the project name</td><td>Prevents episode 12 being uploaded over episode 11</td></tr>
+</table>
+
+<h2>Checklist</h2>
+
+<ul>
+  <li>Limiter ceiling at &minus;1.0 dBTP, threshold just under it &mdash; the limiter is a fuse, not a compressor;</li>
+  <li>Render normalisation: LUFS-I, &minus;16, true peak &minus;1.0 dBTP;</li>
+  <li>48 kHz, and both delivery formats in one pass;</li>
+  <li>Settings saved inside the project file, not in preferences;</li>
+  <li>Measure the whole episode, once, before you upload.</li>
+</ul>
+
+<div class="cta-box">
+  <h3>The render settings, already stored in the project</h3>
+  <p>The <strong>Podcast Mix Template for REAPER</strong> ships with the limiter on the master and the render dialog configured for &minus;16 LUFS-I, &minus;1.0 dBTP and 48 kHz &mdash; MP3 256 for upload and a 24-bit WAV master exported in the same pass. Built-in plug-ins only.</p>
+  <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">View the template &mdash; $19</a>
+</div>
+
+<div class="related">
+  <h3>More guides</h3>
+<a href="reaper-podcast-workflow.html">How to Mix a Multi-Speaker Podcast in REAPER<span>The full routing and processing chain, from raw files to a finished episode.</span></a><a href="reaper-sidechain-ducking.html">Sidechain Ducking in REAPER<span>One send, and the music gets out of the way by itself.</span></a><a href="reaper-4-person-podcast-setup.html">A 4-Person Podcast Setup in REAPER<span>Four voice tracks, four chains, one render.</span></a></div>
+
+<footer>
+  <div>&copy; 2026 NovaKit. All rights reserved.</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="refund.html">Refund</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

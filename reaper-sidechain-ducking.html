@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>Sidechain Ducking in REAPER: Music That Gets Out of the Way</title>
+<meta name="description" content="How to set up sidechain ducking for podcast music in REAPER: dialogue bus into music bus channels 3/4, ReaComp on auxiliary detector, and the release setting that does the work.">
+<link rel="canonical" href="https://novakit-yang.github.io/reaper-sidechain-ducking.html">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sidechain Ducking in REAPER: Music That Gets Out of the Way">
+<meta property="og:description" content="How to set up sidechain ducking for podcast music in REAPER: dialogue bus into music bus channels 3/4, ReaComp on auxiliary detector, and the release setting that does the work.">
+<meta property="og:url" content="https://novakit-yang.github.io/reaper-sidechain-ducking.html">
+<meta property="og:image" content="https://novakit-yang.github.io/product-banner.png">
+<style>
+  :root{
+    --bg:#0A0B0D; --card:#101216; --card2:#15181D; --text:#F1F2F4; --bodyc:#A4AAB4;
+    --muted:#8A9098; --dim:#6E747D; --accent:#A99BFF; --border:rgba(255,255,255,.09);
+    --soft:rgba(255,255,255,.055);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0 0 auto 0;height:420px;pointer-events:none;z-index:0;
+    background:radial-gradient(620px 320px at 18% -10%, rgba(124,108,255,.11), transparent 70%);
+  }
+  .wrap{max-width:768px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+  a{color:#D3CCFF;text-decoration:none;border-bottom:1px solid rgba(169,155,255,.26)}
+  a:hover{border-color:rgba(169,155,255,.6)}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--soft);margin-bottom:56px}
+  .logo{font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .logo span{color:var(--accent)}
+  nav a{margin-left:26px;color:var(--muted);font-size:13.5px;border-bottom:0}
+  nav a:hover{color:var(--text)}
+  .kicker{color:var(--dim);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+  h1{font-size:clamp(29px,4.2vw,39px);line-height:1.18;letter-spacing:-.03em;font-weight:680;margin-bottom:18px}
+  .meta{color:var(--dim);font-size:13px;margin-bottom:36px}
+  .lede{font-size:17.5px;line-height:1.72;color:var(--bodyc);margin-bottom:36px}
+  h2{font-size:22.5px;letter-spacing:-.02em;margin:58px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  h3{font-size:16.5px;margin:30px 0 8px;color:#E4E6EA;letter-spacing:-.01em}
+  p{margin-bottom:16px;color:#CDD1D7}
+  ul,ol{margin:0 0 18px 20px;color:#CDD1D7}
+  li{margin-bottom:9px}
+  code{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:2px 6px;font-size:13.5px;color:#D9D3FF;font-family:var(--mono)}
+  pre{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;font-size:13px;line-height:1.65;color:#D9D3FF;font-family:var(--mono)}
+  .note{background:var(--card);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 22px;font-size:14.5px;color:#C6CAD1}
+  .warn{border-left-color:#D08A55}
+  table{width:100%;border-collapse:collapse;margin:0 0 24px;font-size:14.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--soft);color:#CDD1D7}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.12em}
+  .cta-box{background:linear-gradient(180deg,#12141A,#0C0E11);border:1px solid var(--border);border-radius:16px;padding:32px;margin:58px 0 20px}
+  .cta-box h3{margin-top:0;font-size:20px;color:var(--text)}
+  .cta-box p{color:var(--bodyc);font-size:14.5px;margin-bottom:20px}
+  .btn{display:inline-block;background:#F1F2F4;color:#0A0B0D;font-weight:640;padding:12px 22px;border-radius:9px;font-size:14.5px;border:0}
+  .btn:hover{background:#fff}
+  footer{border-top:1px solid var(--border);margin-top:72px;padding:26px 0 56px;color:var(--dim);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer a{margin-left:18px;border-bottom:0;color:var(--dim)}
+  footer a:hover{color:var(--text)}
+  @media(max-width:600px){
+    .wrap{padding:0 20px}
+    h1{font-size:27px}
+    h2{font-size:20px;margin-top:44px}
+    nav a{margin-left:14px;font-size:12.5px}
+    header{margin-bottom:44px}
+  }
+
+  .related{margin:56px 0 0;padding-top:32px;border-top:1px solid var(--border)}
+  .related h3{font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin:0 0 16px}
+  .related a{display:block;padding:14px 0;border-bottom:1px solid var(--soft);color:#D3CCFF;border-bottom-width:1px}
+  .related a:last-child{border-bottom:0}
+  .related span{display:block;color:var(--muted);font-size:13px;margin-top:3px;border:0}
+
+  .related a{color:#E9E6FF;font-size:15px;font-weight:500;letter-spacing:-.01em;transition:color .18s}
+  .related a:hover{color:#fff}
+  .related a span{font-weight:400;color:#8A9098;font-size:13px;line-height:1.55;margin-top:4px}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Sidechain Ducking in REAPER: Music That Gets Out of the Way",
+  "description": "How to set up sidechain ducking for podcast music in REAPER: dialogue bus into music bus channels 3/4, ReaComp on auxiliary detector, and the release setting that does the work.",
+  "author": {"@type": "Organization", "name": "NovaKit"},
+  "publisher": {"@type": "Organization", "name": "NovaKit"},
+  "mainEntityOfPage": "https://novakit-yang.github.io/reaper-sidechain-ducking.html"
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">Nova<span>Kit</span></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="reaper-podcast-workflow.html">Guides</a>
+    <a href="index.html#products">Template</a>
+  </nav>
+</header>
+
+<div class="kicker">Routing</div>
+<h1>Sidechain Ducking in REAPER: Music That Gets Out of the Way</h1>
+<div class="meta">By NovaKit &middot; 6 min read &middot; REAPER 7</div>
+
+<p class="lede">A music bed under speech has one job: be there when nobody is talking, and get out of the way when somebody is. Doing that by hand means drawing automation across forty minutes of conversation. Doing it with a sidechain means wiring one send once.</p>
+
+<h2>Why volume automation stops scaling</h2>
+
+<p>On a two-minute promo, drawing the music down by hand is fine. On a four-person, forty-minute episode it is not, for three reasons:</p>
+
+<ul>
+  <li><strong>Overlaps.</strong> People talk over each other. The music has to come down <em>before</em> the first syllable and stay down through the crosstalk, which means judging each boundary by ear, dozens of times.</li>
+  <li><strong>Edits.</strong> Every cut you make afterwards shifts every automation point. Re-time the intro and you get to redraw the first two minutes.</li>
+  <li><strong>Consistency.</strong> Hand-drawn ducks are never the same depth twice, and the ear notices a bed that breathes unevenly far more than one that is slightly too low.</li>
+</ul>
+
+<p>A sidechain does the same job from the dialogue itself: the music is pulled down by the voices, at the speed the voices actually arrive.</p>
+
+<h2>The routing, in five steps</h2>
+
+<p>The session needs a <code>DIALOGUE BUS</code> that all the voices feed, and a <code>MUSIC BUS</code> that carries the bed. Both are folder tracks.</p>
+
+<ol>
+  <li>Open the <strong>I/O</strong> panel on <code>DIALOGUE BUS</code> and add a send to <code>MUSIC BUS</code>.</li>
+  <li>Set the send's source to <strong>Audio 1/2</strong> and its destination to <strong>Audio 3/4</strong>. Not 1/2 &mdash; see below.</li>
+  <li>Insert <code>ReaComp</code> on <code>MUSIC BUS</code>.</li>
+  <li>In ReaComp, set <strong>Detector input</strong> to <em>Auxiliary input L+R</em>. This is the whole trick: the compressor now listens to what arrives on channels 3/4 instead of its own input.</li>
+  <li>Turn the music down with the compressor's threshold until the gain-reduction meter moves when somebody speaks, and returns to zero when they stop.</li>
+</ol>
+
+<div class="note"><strong>Why channels 3/4.</strong> If you send the dialogue to the music bus on 1/2, the music bus passes it on to the parent and the voices are heard twice: once clean through the dialogue bus, once through the music bus, slightly delayed by whatever latency the chain adds. Auxiliary channels 3/4 exist precisely so a track can receive audio as a <em>control signal</em> rather than as something to play.</div>
+
+<h2>Setting the four controls</h2>
+
+<p>These are starting points, not settings to copy blindly &mdash; every voice and every bed is different.</p>
+
+<table>
+  <tr><th>Control</th><th>Starting point</th><th>What it does to the mix</th></tr>
+  <tr><td>Threshold</td><td>Low enough that normal speech triggers it, high enough that room tone does not</td><td>Sets the point where ducking begins. Too high and quiet guests never trigger</td></tr>
+  <tr><td>Ratio</td><td>Moderate &mdash; around 4:1 to 6:1</td><td>Sets how far the music drops. Extreme ratios make the bed disappear</td></tr>
+  <tr><td>Attack</td><td>Fast, but not instant &mdash; roughly 10&ndash;20 ms</td><td>Too slow and the first syllable collides with the music; too fast and the duck sounds like a click</td></tr>
+  <tr><td>Release</td><td>Long &mdash; long enough to span the gap between sentences</td><td>The single most important control. Too short and the bed pumps up and down between every phrase</td></tr>
+</table>
+
+<p>Two more that are easy to forget: a small <strong>pre-comp</strong> lets the compressor start ducking a few milliseconds before the voice arrives, which hides the attack entirely; and <strong>makeup gain</strong> restores the level the duck removed, so the music sits at the right height when nobody is speaking.</p>
+
+<h2>Full-band, not multiband &mdash; and why</h2>
+
+<p>Ducking only the midrange looks like the elegant answer: pull down 500 Hz&ndash;3 kHz and leave the bass and cymbals alone. It does not work in REAPER, and the reason is specific:</p>
+
+<div class="note warn"><strong>ReaXcomp has no external sidechain detector input.</strong> REAPER's multiband compressor can only listen to its own input, so band-limited ducking driven by another track is not possible without extra routing. A full-band duck with a well-set release is what most speech-over-music mixes want anyway: the bed is already EQ'd to sit under the voice, so pulling the whole thing down sounds natural rather than surgical.</div>
+
+<h2>Verifying it by ear, not by eye</h2>
+
+<ul>
+  <li>Watch the gain-reduction meter while a full sentence plays: it should move, and it should return to zero in the pauses.</li>
+  <li>Solo the music bus and listen to a whole paragraph &mdash; if you can hear the bed stepping up and down, the release is too short.</li>
+  <li>Then unsolo and listen again: the duck should be invisible. If you notice it, it is too deep.</li>
+  <li>Check the end of the episode: when the music returns after the last word, it should rise over a second or so, not snap back.</li>
+</ul>
+
+<h2>When to still use automation</h2>
+
+<p>Sidechain ducking is for the running bed. Two places still want hand-drawn fades: the intro (music up, voice enters) and the outro (voice out, music resolves). A sidechain will technically handle both, but neither wants to be triggered by speech &mdash; they want a shape you decided on. Use a volume envelope for those two moments and let the sidechain handle everything between them.</p>
+
+<h2>When it does not work, it is almost always one of five things</h2>
+
+<table>
+  <tr><th>Symptom</th><th>Cause</th></tr>
+  <tr><td>Hear the voices twice, slightly hollow</td><td>The send was set to audio 1/2 instead of 3/4, so the music bus is playing the dialogue as well as receiving it</td></tr>
+  <tr><td>Gain reduction meter never moves</td><td>Detector input left on the main input &mdash; ReaComp is listening to the music, which never stops</td></tr>
+  <tr><td>Ducks, but always a fraction late</td><td>Attack too slow, or no pre-comp. The music starts dropping after the first consonant</td></tr>
+  <tr><td>Bed pumps up and down between phrases</td><td>Release too short. This is the most common mistake by a wide margin</td></tr>
+  <tr><td>Music disappears whenever anyone speaks</td><td>Ratio and threshold both set too aggressively. Ducking should be felt, not heard</td></tr>
+</table>
+
+<p>There is also a routing trap worth naming: the send has to come from the <em>bus</em>, not from the four individual voice tracks. Four sends to the same destination sum four times, so the compressor sees a signal roughly 12 dB hotter than any single voice and ducks hard on room tone alone. One send, from the bus, is the correct shape.</p>
+
+<h2>Checklist</h2>
+
+<ul>
+  <li>Send from the dialogue bus to the music bus, source 1/2 &rarr; destination 3/4;</li>
+  <li>ReaComp on the music bus, detector set to auxiliary input;</li>
+  <li>Release long enough to span sentence gaps;</li>
+  <li>Makeup gain restored so the bed sits right between lines;</li>
+  <li>Hand-drawn fades for intro and outro only.</li>
+</ul>
+
+<div class="cta-box">
+  <h3>The ducking, already wired</h3>
+  <p>In the <strong>Podcast Mix Template for REAPER</strong> the dialogue bus already sends to the music bus on channels 3/4, and the compressor on the music bus is already listening to it. Drop your bed on the MUSIC track and it ducks itself.</p>
+  <a class="btn" href="https://www.creem.io/payment/prod_75o7GixL1C1QFKEDhuMkvX">View the template &mdash; $19</a>
+</div>
+
+<div class="related">
+  <h3>More guides</h3>
+<a href="reaper-podcast-workflow.html">How to Mix a Multi-Speaker Podcast in REAPER<span>The full routing and processing chain, from raw files to a finished episode.</span></a><a href="podcast-loudness-16-lufs.html">How to Hit −16 LUFS in REAPER<span>Integrated loudness, true peak, and why the limiter is not a volume knob.</span></a><a href="reaper-4-person-podcast-setup.html">A 4-Person Podcast Setup in REAPER<span>Four voice tracks, four chains, one render.</span></a></div>
+
+<footer>
+  <div>&copy; 2026 NovaKit. All rights reserved.</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="refund.html">Refund</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
